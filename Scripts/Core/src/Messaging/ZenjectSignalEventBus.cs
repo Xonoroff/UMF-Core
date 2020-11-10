@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using Zenject;
+
+#if UNITASK_ENABLED
+using Cysharp.Threading.Tasks;
+#endif
 
 namespace Core.src.Messaging
 {
