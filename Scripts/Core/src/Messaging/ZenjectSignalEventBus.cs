@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Core.src.Messaging
@@ -12,7 +13,24 @@ namespace Core.src.Messaging
         {
             this.signalBus = signalBus;
         }
-        
+
+        #if UNITASK_ENABLED
+        public UniTask<TResponse> FireAsyncUniTask<TRequest, TResponse>(TRequest request) where TRequest : EventBusRequest<TResponse>
+        {
+            var taskCompletionSource = new UniTaskCompletionSource<TResponse>();
+
+            void Handler(TResponse response)
+            {
+                request.Callback -= Handler;
+                taskCompletionSource.TrySetResult(response);
+            }
+            request.Callback += Handler;
+
+            signalBus.Fire(request);
+            return taskCompletionSource.Task;
+        }
+        #endif
+
         public Task<TResponse> FireAsync<TRequest, TResponse>(TRequest request) where TRequest : EventBusRequest<TResponse>
         {
             var taskCompletionSource = new TaskCompletionSource<TResponse>();
