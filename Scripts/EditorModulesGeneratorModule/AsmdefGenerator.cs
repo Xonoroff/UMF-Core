@@ -4,10 +4,11 @@ namespace EditorModulesGeneratorModule
     {
         public string GetFileContent(string assemblyName)
         {
+            //TODO: Use guids for references
             return @"{
             ""name"": """ + assemblyName + @""",
             ""references"": [
-            ""Core"",
+            ""MF.Core"", 
             ""Zenject""
                 ],
             ""optionalUnityReferences"": [],
