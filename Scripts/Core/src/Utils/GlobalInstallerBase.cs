@@ -28,5 +28,12 @@ namespace Core.src.Utils
         {
             return containerContext.Container.ResolveId<DiContainer>(SubContainerName);
         }
+
+        protected ScopeConcreteIdArgConditionCopyNonLazyBinder BindFromResolveGetter<T>()
+        {
+            return Container.Bind<T>()
+                .FromSubContainerResolve()
+                .ByInstanceGetter(SubContainerInstanceGetter);
+        }
     }
 }
