@@ -1,6 +1,7 @@
 ﻿namespace Core.src.Messaging
 {
-    public class DummyResponse
+    public struct DummyResponse
     {
+        public static readonly DummyResponse Default = new DummyResponse();
     }
 }
