@@ -18,6 +18,7 @@ namespace Core.src.Infrastructure
         Action<ICommand> OnCommandCompleted { get; set; }
 
         Action<ICommand, Exception> OnCommandFailed { get; set; }
+        Action<ICommand, float> OnCommandProgressChanged { get; set; }
 
         Action<bool> OnAllCompleted { get; set; }
     }

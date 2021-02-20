@@ -17,6 +17,8 @@ namespace Core.src.Entity
         
         public Action OnSuccess { get; set; }
         
+        public Action<float> OnProgressChanged { get; set; }
+
         public Action<Exception> OnFail { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Core.src.Commands
         public string Description { get; set; }
         public int Priority { get; } = 10000;
         public Action OnSuccess { get; set; }
+        public Action<float> OnProgressChanged { get; set; }
         public Action<Exception> OnFail { get; set; }
     }
 }

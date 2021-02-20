@@ -19,6 +19,8 @@ namespace Core.src.Utils
 
         public Action<ICommand, Exception> OnCommandFailed { get; set; }
         
+        public Action<ICommand, float> OnCommandProgressChanged { get; set; }
+
         public Action<bool> OnAllCompleted { get; set; }
         
         public void Initialize(IEnumerable<ICommand> commandsToExecute)
@@ -51,6 +53,7 @@ namespace Core.src.Utils
                 
                 Current.OnSuccess = OnCommandCompletedHandler;
                 Current.OnFail = OnCommandFailHandler;
+                Current.OnProgressChanged = OnCommandProgressChangedHandler;
                 Debug.Log($"Executing { Current.Description } command");
                 OnCommandStartedExecution?.Invoke(Current);
                 Current.Execute();   
@@ -72,6 +75,11 @@ namespace Core.src.Utils
             UnsubscribeCommand(Current);
             OnCommandCompleted?.Invoke(Current);
             StartExecution();
+        }
+        
+        private void OnCommandProgressChangedHandler(float progress)
+        {
+            OnCommandProgressChanged?.Invoke(Current, progress);
         }
         
         private void OnCommandFailHandler(Exception obj)
