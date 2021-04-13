@@ -9,8 +9,8 @@ namespace Core.src
         public async UniTask<T> ProvideAsset<T>(string assetKey, CancellationToken cancellationToken) where T : Object
         {
             var loadedResource = await Resources.LoadAsync<GameObject>(assetKey).WithCancellation(cancellationToken);
-            
-            return loadedResource as T;
+            var castedGameObject = loadedResource as GameObject;
+            return castedGameObject.GetComponent<T>();
         }
 
         public void ReleaseAsset<T>(T loadedAsset) where T : Object

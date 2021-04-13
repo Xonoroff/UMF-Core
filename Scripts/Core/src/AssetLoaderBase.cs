@@ -16,7 +16,7 @@ namespace Core.src
             this.assetProvider = assetsProvide;
         }
 
-        protected async UniTask<T> LoadAsset<T>(string assetKey, CancellationToken cancellationToken) where T : Object
+        public async UniTask<T> LoadAssetAsync<T>(string assetKey, CancellationToken cancellationToken) where T : Object
         {
             var loadedResource = await assetProvider.ProvideAsset<T>(assetKey, cancellationToken);
             if (cancellationToken.IsCancellationRequested)

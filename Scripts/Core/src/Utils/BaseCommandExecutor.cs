@@ -46,7 +46,6 @@ namespace Core.src.Utils
 
                 if (!Current.IsAvailable())
                 {
-                    Debug.Log($"Command with description { Current.Description } not available");
                     StartExecution();
                     return;
                 }
@@ -54,7 +53,6 @@ namespace Core.src.Utils
                 Current.OnSuccess = OnCommandCompletedHandler;
                 Current.OnFail = OnCommandFailHandler;
                 Current.OnProgressChanged = OnCommandProgressChangedHandler;
-                Debug.Log($"Executing { Current.Description } command");
                 OnCommandStartedExecution?.Invoke(Current);
                 Current.Execute();   
             }
