@@ -14,7 +14,7 @@ namespace Core.src.Utils
         
         private void OnApplicationQuit()
         {
-            signalBus.Fire(new OnApplicationQuitSignal());
+            signalBus?.Fire(new OnApplicationQuitSignal());
         }
     }
 }
