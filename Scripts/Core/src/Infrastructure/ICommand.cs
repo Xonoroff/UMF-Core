@@ -11,7 +11,7 @@ namespace Core.src.Infrastructure
         bool IsAvailable();
 
         string Description { get; set; }
-    
+        
         int Priority { get; }
 
         Action OnSuccess { get; set; }
