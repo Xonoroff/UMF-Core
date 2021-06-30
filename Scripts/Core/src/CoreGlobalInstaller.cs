@@ -48,9 +48,7 @@ namespace Core.src
             
             Container.Bind(typeof(IFactorySync<>)).To(typeof(ActivatorObjectFactory<>))
                 .AsCached();
-            
-            Container.Resolve<IPlayerPrefsRepository<foo>>();
-
+            Container.Bind<ISceneHelper>().To<SceneHelper>().AsTransient();
 
             Container.Bind<ApplicationCycleTracker>()
                 .FromNewComponentOnNewGameObject()
@@ -59,11 +57,6 @@ namespace Core.src
                 .NonLazy();
             
             Container.DeclareSignal<OnApplicationQuitSignal>();
-        }
-        
-        public class foo
-        {
-            
         }
     }
 }
