@@ -2,6 +2,7 @@
 
 namespace Core.src.Utils
 {
+#if NEWTONSOFT_JSON
     public class NewtonsoftSerializer<TObject> : ISerializer<string, TObject>
     {
         public string SerializeObject(TObject value)
@@ -14,4 +15,5 @@ namespace Core.src.Utils
             return Newtonsoft.Json.JsonConvert.DeserializeObject<TObject>(value);
         }
     }
+#endif
 }

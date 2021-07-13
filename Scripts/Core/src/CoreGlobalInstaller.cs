@@ -28,7 +28,26 @@ namespace Core.src
             Container.Bind(typeof(IPlayerPrefsRepository<>)).To(typeof(PlayerPrefsRepository<>)).AsCached();
             
             Container.Bind(typeof(IKeysProvider<Type, string>)).To<TypeKeysProviderDefault>().AsCached();
-            Container.Bind(typeof(ISerializer<,>))
+            
+            Container.Bind(typeof(IFactorySync<>)).To(typeof(ActivatorObjectFactory<>))
+                .AsCached();
+            Container.Bind<ISceneHelper>().To<SceneHelper>().AsTransient();
+
+            Container.Bind<ApplicationCycleTracker>()
+                .FromNewComponentOnNewGameObject()
+                .WithGameObjectName("ApplicationCycleTracker")
+                .AsCached()
+                .NonLazy();
+
+            BindNewtonsoftSerializer(Container);
+            
+            Container.DeclareSignal<OnApplicationQuitSignal>();
+        }
+
+        private void BindNewtonsoftSerializer(DiContainer container)
+        {
+#if NEWTONSOFT_JSON
+            container.Bind(typeof(ISerializer<,>))
                 .FromMethodUntyped(context =>
                 {
                     var members = context.MemberType.GenericTypeArguments;
@@ -45,18 +64,7 @@ namespace Core.src
                     return result;
                 })
                 .AsCached();
-            
-            Container.Bind(typeof(IFactorySync<>)).To(typeof(ActivatorObjectFactory<>))
-                .AsCached();
-            Container.Bind<ISceneHelper>().To<SceneHelper>().AsTransient();
-
-            Container.Bind<ApplicationCycleTracker>()
-                .FromNewComponentOnNewGameObject()
-                .WithGameObjectName("ApplicationCycleTracker")
-                .AsCached()
-                .NonLazy();
-            
-            Container.DeclareSignal<OnApplicationQuitSignal>();
+#endif
         }
     }
 }
