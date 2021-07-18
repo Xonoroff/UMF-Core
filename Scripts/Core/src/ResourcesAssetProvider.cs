@@ -1,10 +1,10 @@
-﻿using System.Threading;
+﻿
 using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
 
 #if UNITASK_ENABLED
 using Cysharp.Threading.Tasks;
-#else
-using System.Threading.Tasks;
 #endif
 
 namespace Core.src
