@@ -22,9 +22,6 @@ namespace Core.src
             this.assetProvider = assetsProvide;
         }
 
-
- 
-    
 #if UNITASK_ENABLED
         public async UniTask<T> LoadAssetAsync<T>(string assetKey, CancellationToken cancellationToken) where T : Object
 #else 
