@@ -50,7 +50,7 @@ namespace Core.src
 #endif
         }
         
-#if UNITASK_EUNITASK_ENABLED
+#if UNITASK_ENABLED
         private UniTask<bool> IsAssetLoadedUniTaskImp(string assetKey, CancellationToken cancellationToken)
         {
             return UniTask.FromResult(true);
