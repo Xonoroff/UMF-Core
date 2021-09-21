@@ -49,6 +49,11 @@ namespace Core.src.Messaging
             return taskCompletionSource.Task;
         }
 
+        public void DeclareSignal<TSignal>()
+        {
+            signalBus.DeclareSignal<TSignal>();
+        }
+
         public void Fire<TRequest>(TRequest request)
         {
             signalBus.Fire(request);

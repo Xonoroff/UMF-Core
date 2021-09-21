@@ -9,6 +9,7 @@ namespace Core.src.Messaging
 {
     public interface IEventBus : IEventBusSync, IEventBusAsync
     {
+        void DeclareSignal<TSignal>();
     }
     
     public interface IEventBusSync
