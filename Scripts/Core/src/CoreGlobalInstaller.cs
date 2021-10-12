@@ -5,8 +5,10 @@ using Core.src.Messaging;
 using Core.src.Signals;
 using Core.src.Utils;
 using MF.Core.Scripts.Core.src;
+using MF.Core.Scripts.Core.src.Utils;
 using ModestTree;
 using Scripts.Core.src.Infrastructure;
+using Unity.Plastic.Newtonsoft.Json;
 using Zenject;
 
 namespace Core.src
@@ -39,12 +41,21 @@ namespace Core.src
                 .AsCached()
                 .NonLazy();
 
-            BindNewtonsoftSerializer(Container);
+            BindSerializers(Container);
             
             Container.DeclareSignal<OnApplicationQuitSignal>();
         }
 
-        private void BindNewtonsoftSerializer(DiContainer container)
+        private void BindSerializers(DiContainer container)
+        {
+            var isNewtonsoft = BindNewtonsoftSerializer(container);
+            if (!isNewtonsoft)
+            {
+                BindUnitySerializer(container);
+            }
+        }
+
+        private bool BindNewtonsoftSerializer(DiContainer container)
         {
 #if NEWTONSOFT_JSON
             container.Bind(typeof(ISerializer<,>))
@@ -63,8 +74,35 @@ namespace Core.src
                     var result = Activator.CreateInstance(resultType);
                     return result;
                 })
-                .AsCached();
+                .AsTransient();
+            
+            return true;
 #endif
+
+            return false;
+        }        
+        
+        private bool BindUnitySerializer(DiContainer container)
+        {
+            container.Bind(typeof(ISerializer<,>))
+                .FromMethodUntyped(context =>
+                {
+                    var members = context.MemberType.GenericTypeArguments;
+                    var keyType = members[0];
+                    var objectType = members[1];
+
+                    if (keyType != typeof(string))
+                    {
+                        return null;
+                    }
+
+                    var resultType = typeof(UnitySerializer<>).MakeGenericType(objectType);
+                    var result = Activator.CreateInstance(resultType);
+                    return result;
+                })
+                .AsTransient();
+            
+            return true;
         }
     }
 }
