@@ -31,7 +31,7 @@ namespace Core.src
             
             Container.Bind(typeof(IFactorySync<>)).To(typeof(ActivatorObjectFactory<>))
                 .AsCached();
-            Container.Bind<ISceneHelper>().To<SceneHelper>().AsTransient();
+            Container.Bind<ISceneHelper>().To<SceneHelper>().AsCached();
 
             Container.Bind<ApplicationCycleTracker>()
                 .FromNewComponentOnNewGameObject()

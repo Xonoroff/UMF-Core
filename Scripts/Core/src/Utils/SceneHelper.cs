@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core.src.Utils
 {
     public class SceneHelper : ISceneHelper
     {
         private GameObject cachedInstance;
-
+        
         public GameObject Root
         {
             get
@@ -17,6 +18,11 @@ namespace Core.src.Utils
 
                 return cachedInstance;
             }
+        }
+
+        public SceneHelper()
+        {
+            SceneManager.sceneLoaded += (arg0, mode) => { cachedInstance = null; };
         }
     }
 }
