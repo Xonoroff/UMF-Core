@@ -37,6 +37,9 @@ namespace MF.Core.Scripts.Core.src.Utils
                     break;
                 case Selectable.SelectionState.Disabled:
                     color = this.colors.disabledColor;
+                    break;                
+                case Selectable.SelectionState.Selected:
+                    color = this.colors.selectedColor;
                     break;
                 default:
                     color = Color.black;
