@@ -10,10 +10,16 @@ namespace MF.Core.Scripts.Core.src
         protected List<Action> deInitializationCallbacks = new List<Action>();
 
         private CancellationToken cancellationToken;
-        
-        protected virtual void Initialize()
+
+        public ViewManagerBase()
         {
             cancellationToken = new CancellationToken();
+            cancellationToken.Register(DeInitialize);
+        }
+        
+        protected void Initialize(CancellationToken ct)
+        {
+            
         }
 
         protected virtual void DeInitialize()
@@ -23,10 +29,12 @@ namespace MF.Core.Scripts.Core.src
                 callback();
             }
 
-            GetAssetLoader()?.ReleaseAllLoadedAssets();
             deInitializationCallbacks.Clear();
         }
 
-        protected abstract IAssetLoader GetAssetLoader();
+        protected void AddDeInitialization(Action act)
+        {
+            deInitializationCallbacks.Add(act);
+        }
     }
 }

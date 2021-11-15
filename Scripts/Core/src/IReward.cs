@@ -4,4 +4,11 @@ using UnityEngine;
 
 public interface IReward
 {
+    string RewardId { get; set; }
+    
+    string RewardCategory { get; set; }
+    
+    public ulong Amount { get; set; }
+        
+    public ulong ExpiredAt { get; set; }
 }
