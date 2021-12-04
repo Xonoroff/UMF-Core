@@ -8,7 +8,7 @@ public interface IReward
     
     string RewardCategory { get; set; }
     
-    public ulong Amount { get; set; }
+    ulong Amount { get; set; }
         
-    public ulong ExpiredAt { get; set; }
+    ulong ExpiredAt { get; set; }
 }
