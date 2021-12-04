@@ -7,6 +7,9 @@ namespace MF.Core.Scripts.Core.src
     public class RewardBase : IReward
     {
         [field: SerializeField]
+        public string Id { get; set; }
+
+        [field: SerializeField]
         public string RewardId { get; set; }
 
         [field: SerializeField]
