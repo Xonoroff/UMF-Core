@@ -1,5 +1,5 @@
 {
-  "name": "com.pprokopov.modular-framework-core",
+  "name": "com.UMF.CORE",
   "displayName": "Modular Framework Core package",
   "version": "0.0.1",
   "unity": "2020.1",
@@ -7,5 +7,6 @@
   "keywords": [ "modular", "core" ],
   "category": "framework",
   "dependencies": {
+    "com.svermeulen.extenject": "https://github.com/Mathijs-Bakker/Extenject.git?path=UnityProject/Assets/Plugins/Zenject/"
   }
 }
