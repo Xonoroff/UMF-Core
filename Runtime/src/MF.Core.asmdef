@@ -23,7 +23,7 @@
         {
             "name": "com.cysharp.unitask",
             "expression": "",
-            "define": "UNITASK_ENABLED"
+            "define": ""
         }
     ],
     "noEngineReferences": false

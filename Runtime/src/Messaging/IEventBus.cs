@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
-
-#if UNITASK_ENABLED
 using Cysharp.Threading.Tasks;
-#endif
 
 namespace Core.src.Messaging
 {
@@ -27,12 +23,7 @@ namespace Core.src.Messaging
 
     public interface IEventBusAsync
     {
-        #if UNITASK_ENABLED
-        UniTask<TResponse> FireAsyncUniTask<TRequest, TResponse>(TRequest request)
-            where TRequest : EventBusRequest<TResponse>;
-        #endif
-
-        Task<TResponse> FireAsync<TRequest, TResponse>(TRequest request)
+        UniTask<TResponse> FireAsync<TRequest, TResponse>(TRequest request)
             where TRequest : EventBusRequest<TResponse>;
     }
 }
