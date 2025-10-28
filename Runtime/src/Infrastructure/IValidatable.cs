@@ -1,7 +1,7 @@
-﻿namespace Core.src.Infrastructure
+namespace UMF.Core.Infrastructure
 {
-	public interface IValidatable
-	{
-		bool IsValid();
-	}
+    public interface IValidatable
+    {
+        bool IsValid();
+    }
 }

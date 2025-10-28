@@ -1,11 +1,14 @@
-﻿using Zenject;
+using Zenject;
 
-namespace Core.src
+namespace UMF.Core.Implementation
 {
-    public class CoreInstaller : Installer
+    namespace Core.src
     {
-        public override void InstallBindings()
+        public class CoreInstaller : Installer
         {
+            public override void InstallBindings()
+            {
+            }
         }
     }
 }

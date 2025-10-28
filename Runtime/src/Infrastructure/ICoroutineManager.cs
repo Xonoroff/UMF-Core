@@ -1,7 +1,7 @@
 using System;
 using UnityEngine.Networking;
 
-namespace Core.src.Infrastructure
+namespace UMF.Core.Infrastructure
 {
     public interface ICoroutineManager
     {
