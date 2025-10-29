@@ -21,8 +21,8 @@ namespace UMF.Core.Implementation
                 Container.Bind<IBigNumberFormatter>().To<BigNumberFormatter>().AsTransient();
                 Container.Bind<IEventBus>().To<ZenjectSignalEventBus>().AsCached();
 
-                Container.Bind(typeof(ISessionRepository<>)).To(typeof(SessionRepository<>)).AsCached();
-                Container.Bind(typeof(IPlayerPrefsRepository<>)).To(typeof(PlayerPrefsRepository<>)).AsCached();
+                // Replaced specific repositories with factory-based approach
+                Container.Bind<IRepositoryFactory>().To<RepositoryFactory>().AsCached();
 
                 Container.Bind(typeof(IKeysProvider<Type, string>)).To<TypeKeysProviderDefault>().AsCached();
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UMF.Core.Implementation
 {
-    public class PlayerPrefsRepository<T> : IPlayerPrefsRepository<T> where T : class
+    public class PlayerPrefsRepository<T> : IRepository<T> where T : class
     {
         private readonly IKeysProvider<Type, string> keysProvider;
 

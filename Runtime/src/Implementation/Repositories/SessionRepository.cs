@@ -4,7 +4,7 @@ using UMF.Core.Infrastructure;
 
 namespace UMF.Core.Implementation
 {
-    public class SessionRepository<T> : ISessionRepository<T>
+    public class SessionRepository<T> : IRepository<T>
     {
         private T cachedData;
 
