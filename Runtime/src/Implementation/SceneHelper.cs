@@ -1,5 +1,6 @@
 using UMF.Core.Infrastructure;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UMF.Core.Implementation
 {

@@ -4,6 +4,7 @@ using System.Numerics;
 using Core.src.Entity;
 using Core.src.Utils;
 using NUnit.Framework;
+using UMF.Core.Implementation;
 using UnityEngine;
 using Random = System.Random;
 

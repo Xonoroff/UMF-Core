@@ -1,4 +1,5 @@
 using System;
+using UMF.Core.Infrastructure;
 
 namespace UMF.Core.Implementation
 {
