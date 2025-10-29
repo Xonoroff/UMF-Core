@@ -1,6 +1,6 @@
 ﻿using UMF.Core.Infrastructure;
 
-namespace UMF.Core.Implementation.DeepCopy
+namespace UMF.Core.Infrastructure
 {
     /// <summary>
     ///     Provides serializers suitable for deep cloning objects via a buffer representation.
