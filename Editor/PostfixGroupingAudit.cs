@@ -11,6 +11,10 @@ namespace UMF.Core.EditorTools
     {
         private static readonly (string Postfix, string ImplFolder, string InfraFolder)[] Rules = new (string, string, string)[]
         {
+            // Commands: executors first (more specific), then commands
+            ("CommandExecutor",    @"Implementation\\Commands\\Executors", @"Infrastructure\\Commands"),
+            ("Command",            @"Implementation\\Commands", @"Infrastructure\\Commands"),
+
             ("SerializerProvider", @"Implementation\\Providers", @"Infrastructure\\Providers"),
             ("Factory",            @"Implementation\\Factories", @"Infrastructure\\Factories"),
             ("Repository",         @"Implementation\\Repositories", @"Infrastructure\\Repositories"),
