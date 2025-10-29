@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace UMF.Core.Infrastructure
+namespace UMF.Core.Implementation.Managers
 {
     public abstract class ViewManagerBase
     {

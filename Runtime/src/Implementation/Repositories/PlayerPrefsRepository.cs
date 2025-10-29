@@ -8,8 +8,6 @@ namespace UMF.Core.Implementation
     {
         private readonly IKeysProvider<Type, string> keysProvider;
 
-        private readonly IFactorySync<T> objectFactory;
-
         private readonly ISerializer<string, T> serializer;
 
         private T cachedData;
@@ -19,7 +17,6 @@ namespace UMF.Core.Implementation
             ISerializer<string, T> serializer)
         {
             this.keysProvider = keysProvider;
-            this.objectFactory = objectFactory;
             this.serializer = serializer;
 
             var key = keysProvider.ProvideKey(typeof(T));
