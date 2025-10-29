@@ -49,6 +49,11 @@ namespace UMF.Core.EditorTools
 
                 var typeName = Path.GetFileNameWithoutExtension(file);
                 var isInterface = typeName.Length > 1 && typeName[0] == 'I' && char.IsUpper(typeName[1]);
+                // Allow base/abstract patterns under Infrastructure even if they match an implementation postfix
+                // Name-based heuristic: Base* or *Base or SignalBase*
+                var isBaseByName = typeName.StartsWith("Base", StringComparison.Ordinal)
+                                   || typeName.EndsWith("Base", StringComparison.Ordinal)
+                                   || typeName.StartsWith("SignalBase", StringComparison.Ordinal);
 
                 var rule = Rules.FirstOrDefault(r => typeName.EndsWith(r.Postfix, StringComparison.Ordinal));
                 if (rule.Postfix == null)
@@ -57,7 +62,8 @@ namespace UMF.Core.EditorTools
                 }
 
                 checkedFiles++;
-                var expectedRel = Path.Combine(isInterface ? rule.InfraFolder : rule.ImplFolder);
+                var useInfra = isInterface || isBaseByName;
+                var expectedRel = Path.Combine(useInfra ? rule.InfraFolder : rule.ImplFolder);
                 var expectedAbs = Path.Combine(root, expectedRel) + Path.DirectorySeparatorChar; // ensure trailing slash
 
                 var normalizedFile = file.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
