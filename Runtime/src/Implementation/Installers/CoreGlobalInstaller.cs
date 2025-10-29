@@ -18,6 +18,10 @@ namespace UMF.Core.Implementation
 
                 SignalBusInstaller.Install(Container);
                 Container.Bind<ICommandExecutor>().To<BaseCommandExecutor>().AsTransient();
+                // Bind example command handler for the new command+handler pattern
+                Container.Bind<UMF.Core.Infrastructure.ICommandHandler<UMF.Core.Implementation.UnloadUnusedResources, UMF.Core.Infrastructure.Unit>>()
+                    .To<UMF.Core.Implementation.UnloadUnusedResourcesHandler>()
+                    .AsTransient();
                 Container.Bind<IBigNumberFormatter>().To<BigNumberFormatter>().AsTransient();
                 Container.Bind<IEventBus>().To<ZenjectSignalEventBus>().AsCached();
 

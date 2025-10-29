@@ -2,32 +2,68 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace UMF.Core.Infrastructure
 {
     public class BaseCommandExecutor : ICommandExecutor
     {
-        private List<ICommand> commandsToExecute;
+        private readonly DiContainer container;
+        private List<object> commandsToExecute = new List<object>();
+        private List<object> failedCommands = new List<object>();
+        private CancellationTokenSource currentCts;
 
-        private List<ICommand> failedCommands;
+        public BaseCommandExecutor(DiContainer container)
+        {
+            this.container = container;
+        }
 
-        public ICommand this[int i] => commandsToExecute[i];
+        public object this[int i] => commandsToExecute[i];
 
         object IEnumerator.Current => Current;
 
-        public Action<ICommand> OnCommandCompleted { get; set; }
+        public Action<object> OnCommandCompleted { get; set; }
 
-        public Action<ICommand, Exception> OnCommandFailed { get; set; }
+        public Action<object, Exception> OnCommandFailed { get; set; }
 
-        public Action<ICommand, float> OnCommandProgressChanged { get; set; }
+        public Action<object, float> OnCommandProgressChanged { get; set; }
 
         public Action<bool> OnAllCompleted { get; set; }
 
-        public void Initialize(IEnumerable<ICommand> commandsToExecute)
+        public void Initialize(IEnumerable<object> commandsToExecute)
         {
-            this.commandsToExecute = commandsToExecute.OrderBy(x => x.Priority).ToList();
-            failedCommands = new List<ICommand>();
+            if (commandsToExecute == null)
+            {
+                throw new ArgumentNullException(nameof(commandsToExecute));
+            }
+
+            this.commandsToExecute = new List<object>();
+            foreach (var cmd in commandsToExecute)
+            {
+                if (cmd == null)
+                {
+                    this.commandsToExecute.Add(null);
+                    continue;
+                }
+
+                // Accept only new-style ICommand<TResult>
+                var iFaces = cmd.GetType().GetInterfaces();
+                var isNewCommand = iFaces.Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICommand<>));
+                if (isNewCommand)
+                {
+                    this.commandsToExecute.Add(cmd);
+                }
+                else
+                {
+                    Debug.LogWarning($"[UMF] Unsupported command type: {cmd.GetType().FullName}. Skipping.");
+                }
+            }
+
+            failedCommands = new List<object>(commandsToExecute);
             Reset();
         }
 
@@ -44,17 +80,8 @@ namespace UMF.Core.Infrastructure
                     return;
                 }
 
-                if (!Current.IsAvailable())
-                {
-                    StartExecution();
-                    return;
-                }
-
-                Current.OnSuccess = OnCommandCompletedHandler;
-                Current.OnFail = OnCommandFailHandler;
-                Current.OnProgressChanged = OnCommandProgressChangedHandler;
                 OnCommandStartedExecution?.Invoke(Current);
-                Current.Execute();
+                ExecuteCurrentAsync();
             }
             else
             {
@@ -66,7 +93,7 @@ namespace UMF.Core.Infrastructure
 
         public int TotalCommands => commandsToExecute.Count;
 
-        public Action<ICommand> OnCommandStartedExecution { get; set; }
+        public Action<object> OnCommandStartedExecution { get; set; }
 
         public bool MoveNext()
         {
@@ -84,42 +111,62 @@ namespace UMF.Core.Infrastructure
             CurrentCommandIndex = -1;
         }
 
-        public ICommand Current =>
+        public object Current =>
             CurrentCommandIndex < commandsToExecute.Count ? commandsToExecute[CurrentCommandIndex] : null;
 
         public void Dispose()
         {
+            currentCts?.Dispose();
+            currentCts = null;
         }
 
-        private void OnCommandCompletedHandler()
+        private async void ExecuteCurrentAsync()
         {
-            UnsubscribeCommand(Current);
-            OnCommandCompleted?.Invoke(Current);
-            StartExecution();
-        }
+            var cmd = Current;
+            try
+            {
+                currentCts = new CancellationTokenSource();
+                var cmdType = cmd.GetType();
+                var iCmdOfT = cmdType.GetInterfaces().First(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(ICommand<>));
+                var resultType = iCmdOfT.GetGenericArguments()[0];
+                var handlerType = typeof(ICommandHandler<,>).MakeGenericType(cmdType, resultType);
+                var handler = container.Resolve(handlerType);
 
-        private void OnCommandProgressChangedHandler(float progress)
-        {
-            OnCommandProgressChanged?.Invoke(Current, progress);
-        }
+                var execMethod = handlerType.GetMethod("ExecuteAsync");
+                IProgress<float> progress = OnCommandProgressChanged != null
+                    ? new Progress<float>(p =>
+                    {
+                        try
+                        {
+                            OnCommandProgressChanged?.Invoke(cmd, p);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
+                    })
+                    : null;
 
-        private void OnCommandFailHandler(Exception obj)
-        {
-            Debug.LogError(Current != null
-                ? $"Command failed! {Current.Description} with message {obj}"
-                : $"On command failed in executor! Found null command error = {obj}");
+                var task = (Task)execMethod.Invoke(handler, new object[] { cmd, currentCts.Token, progress });
+                await task.ConfigureAwait(false);
 
-            UnsubscribeCommand(Current);
-            failedCommands.Add(Current);
-            OnCommandFailed?.Invoke(Current, obj);
-            Current?.Undo();
-            StartExecution();
-        }
-
-        private void UnsubscribeCommand(ICommand command)
-        {
-            if (command?.OnSuccess != null) Current.OnSuccess -= OnCommandCompletedHandler;
-            if (command?.OnFail != null) Current.OnFail -= OnCommandFailHandler;
+                // Notify completion and advance
+                OnCommandCompleted?.Invoke(cmd);
+                StartExecution();
+            }
+            catch (OperationCanceledException oce)
+            {
+                failedCommands.Add(cmd);
+                OnCommandFailed?.Invoke(cmd, oce);
+                StartExecution();
+            }
+            catch (Exception ex)
+            {
+                var e = ex is TargetInvocationException tie && tie.InnerException != null ? tie.InnerException : ex;
+                failedCommands.Add(cmd);
+                OnCommandFailed?.Invoke(cmd, e);
+                StartExecution();
+            }
         }
     }
 }
