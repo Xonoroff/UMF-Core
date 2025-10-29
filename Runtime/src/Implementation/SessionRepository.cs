@@ -10,7 +10,7 @@ namespace UMF.Core.Implementation
 
         public T Get()
         {
-            if (EqualityComparer<T>.Default.Equals(cachedData, default(T)))
+            if (EqualityComparer<T>.Default.Equals(cachedData, default))
             {
                 var newInstance = Activator.CreateInstance<T>();
                 Update(newInstance);

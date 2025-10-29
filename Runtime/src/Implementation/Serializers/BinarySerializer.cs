@@ -3,11 +3,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UMF.Core.Infrastructure;
 
-namespace UMF.Core.Implementation
+namespace UMF.Core.Implementation.Serializers
 {
     /// <summary>
-    /// BinaryFormatter-based implementation of <see cref="IPolymorphicSerializer{TBuffer}"/> with <c>TBuffer = byte[]</c>.
-    /// Note: BinaryFormatter is obsolete; use only for trusted in-memory deep copies.
+    ///     BinaryFormatter-based implementation of <see cref="IPolymorphicSerializer{TBuffer}" /> with <c>TBuffer = byte[]</c>
+    ///     .
+    ///     Note: BinaryFormatter is obsolete; use only for trusted in-memory deep copies.
     /// </summary>
     public sealed class BinarySerializer<TObject> : ISerializer<byte[], TObject>
     {

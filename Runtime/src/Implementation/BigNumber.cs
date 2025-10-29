@@ -122,7 +122,10 @@ namespace UMF.Core.Implementation
         public static BigNumber Pow(BigNumber a, int pow)
         {
             var result = a;
-            for (var i = 1; i < pow; i++) result *= a;
+            for (var i = 1; i < pow; i++)
+            {
+                result *= a;
+            }
 
             return result;
         }
@@ -131,12 +134,20 @@ namespace UMF.Core.Implementation
         {
             var validatedFirst = Validate(a);
             var validatedSecond = Validate(b);
-            if (validatedFirst.PowOfTen < validatedSecond.PowOfTen) return true;
+            if (validatedFirst.PowOfTen < validatedSecond.PowOfTen)
+            {
+                return true;
+            }
 
-            if (validatedFirst.PowOfTen > validatedSecond.PowOfTen) return false;
+            if (validatedFirst.PowOfTen > validatedSecond.PowOfTen)
+            {
+                return false;
+            }
 
             if (validatedFirst.PowOfTen == validatedSecond.PowOfTen)
+            {
                 return validatedFirst.Number < validatedSecond.Number;
+            }
 
             throw new NotImplementedException();
         }
@@ -169,15 +180,20 @@ namespace UMF.Core.Implementation
 
         public static implicit operator BigNumber(float value)
         {
-            if (float.IsInfinity(value)) throw new Exception();
+            if (float.IsInfinity(value))
+            {
+                throw new Exception();
+            }
 
             var pow = 0;
             if (value > 1)
+            {
                 while (value / 10 > 1)
                 {
                     value = value / 10;
                     pow++;
                 }
+            }
 
             return new BigNumber { Number = value, PowOfTen = pow };
         }
@@ -191,11 +207,13 @@ namespace UMF.Core.Implementation
         {
             var pow = 0;
             if (value > 1)
+            {
                 while (value / 10 > 1)
                 {
                     value = value / 10;
                     pow++;
                 }
+            }
 
             return new BigNumber { Number = value, PowOfTen = pow };
         }
@@ -227,9 +245,14 @@ namespace UMF.Core.Implementation
                 {
                     var w = Math.Pow(10, maxPow);
                     if (Math.Abs(res) < 0.01)
+                    {
                         res = operand / w;
+                    }
                     else
+                    {
                         res /= w;
+                    }
+
                     copiedPow -= maxPow;
                 }
 

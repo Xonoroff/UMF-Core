@@ -1,4 +1,4 @@
-namespace UMF.Core.Implementation
+namespace UMF.Core.Implementation.Serializers
 {
 #if NEWTONSOFT_JSON
     public class NewtonsoftSerializer<TObject> : ISerializer<string, TObject>

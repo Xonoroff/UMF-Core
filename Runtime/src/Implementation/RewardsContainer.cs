@@ -11,23 +11,27 @@ namespace UMF.Core.Implementation
     {
         private readonly Dictionary<string, List<IReward>> rewards = new();
 
-        [SerializeField] private readonly List<RewardsContainerSerializationWrapper> serializableRewards = new();
+        private readonly List<RewardsContainerSerializationWrapper> serializableRewards = new();
 
         public void OnBeforeSerialize()
         {
             serializableRewards.Clear();
             foreach (var reward in rewards)
+            {
                 serializableRewards.Add(new RewardsContainerSerializationWrapper
                 {
                     Key = reward.Key,
                     Rewards = reward.Value.Select(x => x as RewardBase).ToList()
                 });
+            }
         }
 
         public void OnAfterDeserialize()
         {
             foreach (var serializableReward in serializableRewards)
+            {
                 rewards.Add(serializableReward.Key, serializableReward.Rewards.Select(x => x as IReward).ToList());
+            }
         }
 
         public bool ContainsKey(string general)

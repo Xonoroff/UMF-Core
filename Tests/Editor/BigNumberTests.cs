@@ -5,6 +5,7 @@ using Core.src.Entity;
 using Core.src.Utils;
 using NUnit.Framework;
 using UMF.Core.Implementation;
+using UMF.Core.Implementation.Formatters;
 using UnityEngine;
 using Random = System.Random;
 

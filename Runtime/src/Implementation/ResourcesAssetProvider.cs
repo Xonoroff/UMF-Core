@@ -25,14 +25,14 @@ namespace UMF.Core.Implementation
             return IsAssetLoadedUniTaskImp(assetKey, cancellationToken);
         }
 
-        private UniTask<bool> IsAssetLoadedUniTaskImp(string assetKey, CancellationToken cancellationToken)
-        {
-            return UniTask.FromResult(true);
-        }
-
         public void ReleaseAsset<T>(T loadedAsset) where T : Object
         {
             Resources.UnloadAsset(loadedAsset);
+        }
+
+        private UniTask<bool> IsAssetLoadedUniTaskImp(string assetKey, CancellationToken cancellationToken)
+        {
+            return UniTask.FromResult(true);
         }
     }
 }

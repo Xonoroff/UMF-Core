@@ -48,7 +48,7 @@ namespace UMF.Core.Implementation
 
         public void Subscribe<TRequest>(Action<TRequest> callback)
         {
-            signalBus.Subscribe<TRequest>(callback);
+            signalBus.Subscribe(callback);
         }
 
         public void Unsubscribe<TRequest>(Action callback)
@@ -58,7 +58,7 @@ namespace UMF.Core.Implementation
 
         public void Unsubscribe<TRequest>(Action<TRequest> callback)
         {
-            signalBus.Unsubscribe<TRequest>(callback);
+            signalBus.Unsubscribe(callback);
         }
     }
 }

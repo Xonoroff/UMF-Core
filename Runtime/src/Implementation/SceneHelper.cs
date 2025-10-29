@@ -17,7 +17,10 @@ namespace UMF.Core.Implementation
         {
             get
             {
-                if (cachedInstance == null) cachedInstance = new GameObject("SceneRoot");
+                if (cachedInstance == null)
+                {
+                    cachedInstance = new GameObject("SceneRoot");
+                }
 
                 return cachedInstance;
             }

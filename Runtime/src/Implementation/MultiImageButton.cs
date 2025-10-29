@@ -12,7 +12,10 @@ namespace UMF.Core.Implementation
         {
             get
             {
-                if (m_graphics == null) m_graphics = targetGraphic.transform.parent.GetComponentsInChildren<Graphic>();
+                if (m_graphics == null)
+                {
+                    m_graphics = targetGraphic.transform.parent.GetComponentsInChildren<Graphic>();
+                }
 
                 return m_graphics;
             }
@@ -23,43 +26,50 @@ namespace UMF.Core.Implementation
             Color color;
             switch (state)
             {
-                case Selectable.SelectionState.Normal:
-                    color = this.colors.normalColor;
+                case SelectionState.Normal:
+                    color = colors.normalColor;
                     break;
-                case Selectable.SelectionState.Highlighted:
-                    color = this.colors.highlightedColor;
+                case SelectionState.Highlighted:
+                    color = colors.highlightedColor;
                     break;
-                case Selectable.SelectionState.Pressed:
-                    color = this.colors.pressedColor;
+                case SelectionState.Pressed:
+                    color = colors.pressedColor;
                     break;
-                case Selectable.SelectionState.Disabled:
-                    color = this.colors.disabledColor;
+                case SelectionState.Disabled:
+                    color = colors.disabledColor;
                     break;
-                case Selectable.SelectionState.Selected:
-                    color = this.colors.selectedColor;
+                case SelectionState.Selected:
+                    color = colors.selectedColor;
                     break;
                 default:
                     color = Color.black;
                     break;
             }
 
-            if (base.gameObject.activeInHierarchy)
-                switch (this.transition)
+            if (gameObject.activeInHierarchy)
+            {
+                switch (transition)
                 {
-                    case Selectable.Transition.ColorTint:
-                        ColorTween(color * this.colors.colorMultiplier, instant);
+                    case Transition.ColorTint:
+                        ColorTween(color * colors.colorMultiplier, instant);
                         break;
                     default:
                         throw new NotSupportedException();
                 }
+            }
         }
 
         private void ColorTween(Color targetColor, bool instant)
         {
-            if (this.targetGraphic == null) return;
+            if (targetGraphic == null)
+            {
+                return;
+            }
 
-            foreach (Graphic g in Graphics)
-                g.CrossFadeColor(targetColor, !instant ? this.colors.fadeDuration : 0f, true, true);
+            foreach (var g in Graphics)
+            {
+                g.CrossFadeColor(targetColor, !instant ? colors.fadeDuration : 0f, true, true);
+            }
         }
     }
 }

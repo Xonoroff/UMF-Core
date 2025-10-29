@@ -1,7 +1,7 @@
 using UMF.Core.Infrastructure;
 using UnityEngine;
 
-namespace UMF.Core.Implementation
+namespace UMF.Core.Implementation.Serializers
 {
     public class UnitySerializer<TObject> : ISerializer<string, TObject>
     {

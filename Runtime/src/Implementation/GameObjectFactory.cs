@@ -20,7 +20,10 @@ namespace UMF.Core.Implementation
         public T CreateFromComponentOnPrefab<T>(T componentOnPrefab, bool dontDestroy = true) where T : MonoBehaviour
         {
             var instantiated = container.InstantiatePrefab(componentOnPrefab);
-            if (!dontDestroy) instantiated.transform.SetParent(sceneHelper.Root.transform);
+            if (!dontDestroy)
+            {
+                instantiated.transform.SetParent(sceneHelper.Root.transform);
+            }
 
             return instantiated.GetComponent<T>();
         }
@@ -31,7 +34,10 @@ namespace UMF.Core.Implementation
             var instantiated = container.InstantiatePrefab(view.ViewGameObject);
             var viewComponent = instantiated.GetComponent<TView>();
             viewComponent.SetViewEntity(viewEntity);
-            if (!dontDestroy) instantiated.transform.SetParent(sceneHelper.Root.transform);
+            if (!dontDestroy)
+            {
+                instantiated.transform.SetParent(sceneHelper.Root.transform);
+            }
 
             return viewComponent;
         }

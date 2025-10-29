@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace UMF.Core.Implementation
+namespace UMF.Core.Implementation.Formatters
 {
     public class BigNumberFormatProvider : IFormatProvider, ICustomFormatter
     {
@@ -24,7 +24,10 @@ namespace UMF.Core.Implementation
                 return result.ToString(format) + representation;
             }
 
-            if (arg == null) return "0";
+            if (arg == null)
+            {
+                return "0";
+            }
 
             throw new NotImplementedException();
         }
@@ -32,20 +35,39 @@ namespace UMF.Core.Implementation
         public object GetFormat(Type formatType)
         {
             if (formatType == typeof(ICustomFormatter))
+            {
                 return this;
+            }
+
             return null;
         }
 
         private string GetStringRepresentationByPow(int pow)
         {
-            if (pow < 4) return "";
-            if (pow < 6) return "K";
+            if (pow < 4)
+            {
+                return "";
+            }
 
-            if (pow < 9) return "M";
+            if (pow < 6)
+            {
+                return "K";
+            }
 
-            if (pow < 12) return "B";
+            if (pow < 9)
+            {
+                return "M";
+            }
 
-            if (pow < 15) return "T";
+            if (pow < 12)
+            {
+                return "B";
+            }
+
+            if (pow < 15)
+            {
+                return "T";
+            }
 
             var powMap = new Dictionary<int, char>();
             for (var i = 0; i < alphabetCount; i++)

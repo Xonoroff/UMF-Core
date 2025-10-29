@@ -1,16 +1,22 @@
 using System;
 using UMF.Core.Infrastructure;
 
-namespace UMF.Core.Implementation
+namespace UMF.Core.Implementation.Formatters
 {
     public class BigNumberFormatter : IBigNumberFormatter
     {
         public string Format(BigNumber bigNumber)
         {
             var format = "{0:#0,0}";
-            if (bigNumber.PowOfTen < 3) format = "{0:#0}";
+            if (bigNumber.PowOfTen < 3)
+            {
+                format = "{0:#0}";
+            }
 
-            if (bigNumber.PowOfTen >= 4) format = "{0:#0.00}";
+            if (bigNumber.PowOfTen >= 4)
+            {
+                format = "{0:#0.00}";
+            }
 
             return string.Format(new BigNumberFormatProvider(), format, bigNumber);
         }

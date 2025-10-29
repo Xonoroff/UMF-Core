@@ -8,21 +8,35 @@ namespace UMF.Core.Implementation
         public static void Randomize(object o)
         {
             var allFields = o.GetType().GetFields();
-            foreach (var fieldInfo in allFields) fieldInfo.SetValue(o, GetRandomValue(fieldInfo));
+            foreach (var fieldInfo in allFields)
+            {
+                fieldInfo.SetValue(o, GetRandomValue(fieldInfo));
+            }
 
             var allProps = o.GetType().GetProperties();
-            foreach (var propInfo in allProps) propInfo.SetValue(o, GetRandomValue(propInfo), null);
+            foreach (var propInfo in allProps)
+            {
+                propInfo.SetValue(o, GetRandomValue(propInfo), null);
+            }
         }
 
         public static object GetRandomValue(MemberInfo memberInfo)
         {
             Type expectedType = null;
             if (memberInfo is FieldInfo)
+            {
                 expectedType = ((FieldInfo)memberInfo).FieldType;
-            else if (memberInfo is PropertyInfo) expectedType = ((PropertyInfo)memberInfo).PropertyType;
+            }
+            else if (memberInfo is PropertyInfo)
+            {
+                expectedType = ((PropertyInfo)memberInfo).PropertyType;
+            }
 
             var randomValue = GetRandomValue(expectedType);
-            if (expectedType == typeof(string)) randomValue += "-" + memberInfo.Name.ToLower();
+            if (expectedType == typeof(string))
+            {
+                randomValue += "-" + memberInfo.Name.ToLower();
+            }
 
             return randomValue;
         }
@@ -36,14 +50,23 @@ namespace UMF.Core.Implementation
         {
             if (expectedType.IsValueType)
             {
-                if (expectedType == typeof(Guid)) return Guid.NewGuid();
+                if (expectedType == typeof(Guid))
+                {
+                    return Guid.NewGuid();
+                }
 
-                if (expectedType == typeof(int)) return new Random().Next(int.MaxValue);
+                if (expectedType == typeof(int))
+                {
+                    return new Random().Next(int.MaxValue);
+                }
 
                 return Activator.CreateInstance(expectedType);
             }
 
-            if (expectedType == typeof(string)) return "fake-string";
+            if (expectedType == typeof(string))
+            {
+                return "fake-string";
+            }
 
             return null;
         }
