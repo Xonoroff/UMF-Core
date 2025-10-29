@@ -1,6 +1,14 @@
+
 namespace UMF.Core.Implementation
 {
 #if UNITY_ADDRESSABLES
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+    using UMF.Core.Infrastructure;
+    using UnityEngine.AddressableAssets;
+    using UnityEngine;
+    using UnityEngine.ResourceManagement.AsyncOperations;
+    
     public class AddressablesAssetProvider : IAssetProvider
     {
         public UniTask<T> ProvideAsset<T>(string assetKey, CancellationToken cancellationToken) where T : Object
